@@ -1,5 +1,9 @@
 # Simulating the recordings of an accelerometer
 
+## Note
+
+Unfortunately, GitHub doesn't render LaTeX equations in its readme. Please click [here](./draft.ipynb) to see a properly formatted version of this document.
+
 ## Introduction
 
 Accelerometers can, as their name suggests, measure accelerations.
