@@ -3,5 +3,6 @@
 /*.egg-info
 /*env3
 .vscode/
+.coverage
 build/
 dist/
