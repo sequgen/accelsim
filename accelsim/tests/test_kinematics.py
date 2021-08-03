@@ -58,3 +58,24 @@ def test_uniform_rotation():
 
     assert( accels_x == pytest.approx(expected_a_x, abs = 1e-2) )
     assert( accels_y == pytest.approx(expected_a_y, abs = 5e-2) )
+
+
+def test_uniform_rotation_absolute():
+    R0 = 1  # Radius of rotation
+    w = 2*np.pi  # Angular speed
+
+    def a(t):
+        '''Acceleration in the inertial system'''
+        return np.matrix([[.0],
+                          [.0]])
+
+    def R(t):
+        '''Relative displacement'''
+        return R0 * np.matrix([[np.cos(w*t)],
+                               [np.sin(w*t)]])
+
+    ts = np.linspace(0, 1, 2)
+    accels = a_ni_abs(ts, a, R)
+    expected_a = w ** 2 * R0
+
+    assert(accels == pytest.approx(expected_a, abs=1e-2))
