@@ -28,3 +28,33 @@ def test_free_fall():
     # Assert they are as expected
     tol = 0.05
     assert(np.max(accels) < tol)
+
+def test_uniform_rotation():
+    R0 = 1  # Radius of rotation
+    w = 2*np.pi  # Angular speed
+
+    def a(t):
+        '''Acceleration in the inertial system'''
+        return np.matrix([[.0],
+                          [.0]])
+
+    def R(t):
+        '''Relative displacement'''
+        return R0 * np.matrix([[np.cos(w*t)],
+                               [np.sin(w*t)]])
+
+    def omega(t):
+        '''Relative orientation matrix'''
+        return np.matrix([[+np.cos(w*t), np.sin(w*t)],
+                          [-np.sin(w*t), np.cos(w*t)]])
+
+    ts = np.linspace(0, 1, 2)
+    accels = a_ni(ts, a, R, omega)
+    accels_x = accels[0, ]
+    accels_y = accels[1, ]
+
+    expected_a_x = w ** 2 * R0
+    expected_a_y = 0
+
+    assert( accels_x == pytest.approx(expected_a_x, abs = 1e-2) )
+    assert( accels_y == pytest.approx(expected_a_y, abs = 5e-2) )
