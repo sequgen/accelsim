@@ -48,7 +48,7 @@ def test_uniform_rotation():
         return np.matrix([[+np.cos(w*t), np.sin(w*t)],
                           [-np.sin(w*t), np.cos(w*t)]])
 
-    ts = np.linspace(0, 1, 2)
+    ts = np.linspace(0, 1, 500)
     accels = a_ni(ts, a, R, omega)
     accels_x = accels[0, ]
     accels_y = accels[1, ]
@@ -74,8 +74,36 @@ def test_uniform_rotation_absolute():
         return R0 * np.matrix([[np.cos(w*t)],
                                [np.sin(w*t)]])
 
-    ts = np.linspace(0, 1, 2)
+    ts = np.linspace(0, 1, 500)
     accels = a_ni_abs(ts, a, R)
     expected_a = w ** 2 * R0
 
     assert(accels == pytest.approx(expected_a, abs=1e-2))
+
+def test_uniform_rotation_rollercoaster():
+    R0 = 1  # Radius of rotation
+    w = 2*np.pi / 25  # Angular speed
+
+
+    def a(t):
+        '''Acceleration in the inertial system'''
+        return np.matrix([[.0],
+                          [.0]])
+
+    def R(t):
+        '''Relative displacement'''
+        return R0 * np.matrix([[np.cos(w*t)],
+                               [np.sin(w*t)]])
+
+
+    # Times to plot
+    ts = np.linspace(0, 1, 500)
+    accels = a_ni_auto(ts, a, R)
+    accels_x = accels[0, ]
+    accels_y = accels[1, ]
+
+    expected_a_x = 0 
+    expected_a_y = - w ** 2 * R0
+
+    assert(accels_x == pytest.approx(expected_a_x, abs=1e-2))
+    assert(accels_y == pytest.approx(expected_a_y, abs=5e-2))
